@@ -1,0 +1,912 @@
+   0  $accept : %entry% $end
+
+   1  main : process SEMICOLON
+   2       | VALID property SEMICOLON
+   3       | judgment SEMICOLON
+   4       | toplevel SEMICOLON
+
+   5  process : par
+
+   6  par : process_atom PAR par
+   7      | process_atom
+
+   8  process_atom : STOP
+   9               | input
+  10               | lift
+  11               | drop
+  12               | group
+
+  13  input : guard continuation
+  14        | guard
+
+  15  guard : name LPAREN name RPAREN
+
+  16  lift : name LMSET process RMSET
+
+  17  drop : RANGLE name LANGLE
+
+  18  group : LBRACK process RBRACK
+
+  19  name : QUOTE process QUOTE
+
+  20  continuation : LCURLY process RCURLY
+
+  21  property : atomic_form
+  22           | negation
+  23           | conjunction
+  24           | mixture
+  25           | descent
+  26           | elevation
+  27           | activity
+  28           | group_form
+
+  29  atomic_form : TRUE
+  30              | STOP
+
+  31  negation : TILDE property
+
+  32  conjunction : property AMPERSAND property
+
+  33  mixture : property PAR property
+
+  34  descent : RANGLE name LANGLE
+
+  35  elevation : indication LANGLE property RANGLE
+
+  36  activity : LANGLE indication WHIMPER name RANGLE LCURLY property RCURLY
+
+  37  group_form : LBRACK property RBRACK
+
+  38  indication : QUOTE property QUOTE
+
+  39  judgment : process MODELS property
+
+  40  toplevel : QUIT
+
+  41  %entry% : '\001' main
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . main  (41)
+
+	STOP  shift 3
+	LBRACK  shift 4
+	RANGLE  shift 5
+	QUOTE  shift 6
+	VALID  shift 7
+	QUIT  shift 8
+	.  error
+
+	main  goto 9
+	process  goto 10
+	par  goto 11
+	process_atom  goto 12
+	input  goto 13
+	lift  goto 14
+	drop  goto 15
+	group  goto 16
+	guard  goto 17
+	name  goto 18
+	judgment  goto 19
+	toplevel  goto 20
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	process_atom : STOP .  (8)
+
+	.  reduce 8
+
+
+state 4
+	group : LBRACK . process RBRACK  (18)
+
+	STOP  shift 3
+	LBRACK  shift 4
+	RANGLE  shift 5
+	QUOTE  shift 6
+	.  error
+
+	process  goto 21
+	par  goto 11
+	process_atom  goto 12
+	input  goto 13
+	lift  goto 14
+	drop  goto 15
+	group  goto 16
+	guard  goto 17
+	name  goto 18
+
+
+state 5
+	drop : RANGLE . name LANGLE  (17)
+
+	QUOTE  shift 6
+	.  error
+
+	name  goto 22
+
+
+state 6
+	name : QUOTE . process QUOTE  (19)
+
+	STOP  shift 3
+	LBRACK  shift 4
+	RANGLE  shift 5
+	QUOTE  shift 6
+	.  error
+
+	process  goto 23
+	par  goto 11
+	process_atom  goto 12
+	input  goto 13
+	lift  goto 14
+	drop  goto 15
+	group  goto 16
+	guard  goto 17
+	name  goto 18
+
+
+state 7
+	main : VALID . property SEMICOLON  (2)
+
+	STOP  shift 24
+	LBRACK  shift 25
+	LANGLE  shift 26
+	RANGLE  shift 27
+	QUOTE  shift 28
+	TILDE  shift 29
+	TRUE  shift 30
+	.  error
+
+	property  goto 31
+	atomic_form  goto 32
+	negation  goto 33
+	conjunction  goto 34
+	mixture  goto 35
+	descent  goto 36
+	elevation  goto 37
+	activity  goto 38
+	group_form  goto 39
+	indication  goto 40
+
+
+state 8
+	toplevel : QUIT .  (40)
+
+	.  reduce 40
+
+
+state 9
+	%entry% : '\001' main .  (41)
+
+	.  reduce 41
+
+
+state 10
+	main : process . SEMICOLON  (1)
+	judgment : process . MODELS property  (39)
+
+	SEMICOLON  shift 41
+	MODELS  shift 42
+	.  error
+
+
+state 11
+	process : par .  (5)
+
+	.  reduce 5
+
+
+state 12
+	par : process_atom . PAR par  (6)
+	par : process_atom .  (7)
+
+	PAR  shift 43
+	RBRACK  reduce 7
+	RCURLY  reduce 7
+	RMSET  reduce 7
+	QUOTE  reduce 7
+	SEMICOLON  reduce 7
+	MODELS  reduce 7
+
+
+state 13
+	process_atom : input .  (9)
+
+	.  reduce 9
+
+
+state 14
+	process_atom : lift .  (10)
+
+	.  reduce 10
+
+
+state 15
+	process_atom : drop .  (11)
+
+	.  reduce 11
+
+
+state 16
+	process_atom : group .  (12)
+
+	.  reduce 12
+
+
+state 17
+	input : guard . continuation  (13)
+	input : guard .  (14)
+
+	LCURLY  shift 44
+	RBRACK  reduce 14
+	RCURLY  reduce 14
+	RMSET  reduce 14
+	QUOTE  reduce 14
+	SEMICOLON  reduce 14
+	PAR  reduce 14
+	MODELS  reduce 14
+
+	continuation  goto 45
+
+
+state 18
+	guard : name . LPAREN name RPAREN  (15)
+	lift : name . LMSET process RMSET  (16)
+
+	LPAREN  shift 46
+	LMSET  shift 47
+	.  error
+
+
+state 19
+	main : judgment . SEMICOLON  (3)
+
+	SEMICOLON  shift 48
+	.  error
+
+
+state 20
+	main : toplevel . SEMICOLON  (4)
+
+	SEMICOLON  shift 49
+	.  error
+
+
+state 21
+	group : LBRACK process . RBRACK  (18)
+
+	RBRACK  shift 50
+	.  error
+
+
+state 22
+	drop : RANGLE name . LANGLE  (17)
+
+	LANGLE  shift 51
+	.  error
+
+
+state 23
+	name : QUOTE process . QUOTE  (19)
+
+	QUOTE  shift 52
+	.  error
+
+
+state 24
+	atomic_form : STOP .  (30)
+
+	.  reduce 30
+
+
+state 25
+	group_form : LBRACK . property RBRACK  (37)
+
+	STOP  shift 24
+	LBRACK  shift 25
+	LANGLE  shift 26
+	RANGLE  shift 27
+	QUOTE  shift 28
+	TILDE  shift 29
+	TRUE  shift 30
+	.  error
+
+	property  goto 53
+	atomic_form  goto 32
+	negation  goto 33
+	conjunction  goto 34
+	mixture  goto 35
+	descent  goto 36
+	elevation  goto 37
+	activity  goto 38
+	group_form  goto 39
+	indication  goto 40
+
+
+state 26
+	activity : LANGLE . indication WHIMPER name RANGLE LCURLY property RCURLY  (36)
+
+	QUOTE  shift 28
+	.  error
+
+	indication  goto 54
+
+
+state 27
+	descent : RANGLE . name LANGLE  (34)
+
+	QUOTE  shift 6
+	.  error
+
+	name  goto 55
+
+
+state 28
+	indication : QUOTE . property QUOTE  (38)
+
+	STOP  shift 24
+	LBRACK  shift 25
+	LANGLE  shift 26
+	RANGLE  shift 27
+	QUOTE  shift 28
+	TILDE  shift 29
+	TRUE  shift 30
+	.  error
+
+	property  goto 56
+	atomic_form  goto 32
+	negation  goto 33
+	conjunction  goto 34
+	mixture  goto 35
+	descent  goto 36
+	elevation  goto 37
+	activity  goto 38
+	group_form  goto 39
+	indication  goto 40
+
+
+state 29
+	negation : TILDE . property  (31)
+
+	STOP  shift 24
+	LBRACK  shift 25
+	LANGLE  shift 26
+	RANGLE  shift 27
+	QUOTE  shift 28
+	TILDE  shift 29
+	TRUE  shift 30
+	.  error
+
+	property  goto 57
+	atomic_form  goto 32
+	negation  goto 33
+	conjunction  goto 34
+	mixture  goto 35
+	descent  goto 36
+	elevation  goto 37
+	activity  goto 38
+	group_form  goto 39
+	indication  goto 40
+
+
+state 30
+	atomic_form : TRUE .  (29)
+
+	.  reduce 29
+
+
+state 31
+	main : VALID property . SEMICOLON  (2)
+	conjunction : property . AMPERSAND property  (32)
+	mixture : property . PAR property  (33)
+
+	SEMICOLON  shift 58
+	PAR  shift 59
+	AMPERSAND  shift 60
+	.  error
+
+
+state 32
+	property : atomic_form .  (21)
+
+	.  reduce 21
+
+
+state 33
+	property : negation .  (22)
+
+	.  reduce 22
+
+
+state 34
+	property : conjunction .  (23)
+
+	.  reduce 23
+
+
+state 35
+	property : mixture .  (24)
+
+	.  reduce 24
+
+
+state 36
+	property : descent .  (25)
+
+	.  reduce 25
+
+
+state 37
+	property : elevation .  (26)
+
+	.  reduce 26
+
+
+state 38
+	property : activity .  (27)
+
+	.  reduce 27
+
+
+state 39
+	property : group_form .  (28)
+
+	.  reduce 28
+
+
+state 40
+	elevation : indication . LANGLE property RANGLE  (35)
+
+	LANGLE  shift 61
+	.  error
+
+
+state 41
+	main : process SEMICOLON .  (1)
+
+	.  reduce 1
+
+
+state 42
+	judgment : process MODELS . property  (39)
+
+	STOP  shift 24
+	LBRACK  shift 25
+	LANGLE  shift 26
+	RANGLE  shift 27
+	QUOTE  shift 28
+	TILDE  shift 29
+	TRUE  shift 30
+	.  error
+
+	property  goto 62
+	atomic_form  goto 32
+	negation  goto 33
+	conjunction  goto 34
+	mixture  goto 35
+	descent  goto 36
+	elevation  goto 37
+	activity  goto 38
+	group_form  goto 39
+	indication  goto 40
+
+
+state 43
+	par : process_atom PAR . par  (6)
+
+	STOP  shift 3
+	LBRACK  shift 4
+	RANGLE  shift 5
+	QUOTE  shift 6
+	.  error
+
+	par  goto 63
+	process_atom  goto 12
+	input  goto 13
+	lift  goto 14
+	drop  goto 15
+	group  goto 16
+	guard  goto 17
+	name  goto 18
+
+
+state 44
+	continuation : LCURLY . process RCURLY  (20)
+
+	STOP  shift 3
+	LBRACK  shift 4
+	RANGLE  shift 5
+	QUOTE  shift 6
+	.  error
+
+	process  goto 64
+	par  goto 11
+	process_atom  goto 12
+	input  goto 13
+	lift  goto 14
+	drop  goto 15
+	group  goto 16
+	guard  goto 17
+	name  goto 18
+
+
+state 45
+	input : guard continuation .  (13)
+
+	.  reduce 13
+
+
+state 46
+	guard : name LPAREN . name RPAREN  (15)
+
+	QUOTE  shift 6
+	.  error
+
+	name  goto 65
+
+
+state 47
+	lift : name LMSET . process RMSET  (16)
+
+	STOP  shift 3
+	LBRACK  shift 4
+	RANGLE  shift 5
+	QUOTE  shift 6
+	.  error
+
+	process  goto 66
+	par  goto 11
+	process_atom  goto 12
+	input  goto 13
+	lift  goto 14
+	drop  goto 15
+	group  goto 16
+	guard  goto 17
+	name  goto 18
+
+
+state 48
+	main : judgment SEMICOLON .  (3)
+
+	.  reduce 3
+
+
+state 49
+	main : toplevel SEMICOLON .  (4)
+
+	.  reduce 4
+
+
+state 50
+	group : LBRACK process RBRACK .  (18)
+
+	.  reduce 18
+
+
+state 51
+	drop : RANGLE name LANGLE .  (17)
+
+	.  reduce 17
+
+
+state 52
+	name : QUOTE process QUOTE .  (19)
+
+	.  reduce 19
+
+
+state 53
+	conjunction : property . AMPERSAND property  (32)
+	mixture : property . PAR property  (33)
+	group_form : LBRACK property . RBRACK  (37)
+
+	RBRACK  shift 67
+	PAR  shift 59
+	AMPERSAND  shift 60
+	.  error
+
+
+state 54
+	activity : LANGLE indication . WHIMPER name RANGLE LCURLY property RCURLY  (36)
+
+	WHIMPER  shift 68
+	.  error
+
+
+state 55
+	descent : RANGLE name . LANGLE  (34)
+
+	LANGLE  shift 69
+	.  error
+
+
+state 56
+	conjunction : property . AMPERSAND property  (32)
+	mixture : property . PAR property  (33)
+	indication : QUOTE property . QUOTE  (38)
+
+	QUOTE  shift 70
+	PAR  shift 59
+	AMPERSAND  shift 60
+	.  error
+
+
+state 57
+	negation : TILDE property .  (31)
+	conjunction : property . AMPERSAND property  (32)
+	mixture : property . PAR property  (33)
+
+	.  reduce 31
+
+
+state 58
+	main : VALID property SEMICOLON .  (2)
+
+	.  reduce 2
+
+
+state 59
+	mixture : property PAR . property  (33)
+
+	STOP  shift 24
+	LBRACK  shift 25
+	LANGLE  shift 26
+	RANGLE  shift 27
+	QUOTE  shift 28
+	TILDE  shift 29
+	TRUE  shift 30
+	.  error
+
+	property  goto 71
+	atomic_form  goto 32
+	negation  goto 33
+	conjunction  goto 34
+	mixture  goto 35
+	descent  goto 36
+	elevation  goto 37
+	activity  goto 38
+	group_form  goto 39
+	indication  goto 40
+
+
+state 60
+	conjunction : property AMPERSAND . property  (32)
+
+	STOP  shift 24
+	LBRACK  shift 25
+	LANGLE  shift 26
+	RANGLE  shift 27
+	QUOTE  shift 28
+	TILDE  shift 29
+	TRUE  shift 30
+	.  error
+
+	property  goto 72
+	atomic_form  goto 32
+	negation  goto 33
+	conjunction  goto 34
+	mixture  goto 35
+	descent  goto 36
+	elevation  goto 37
+	activity  goto 38
+	group_form  goto 39
+	indication  goto 40
+
+
+state 61
+	elevation : indication LANGLE . property RANGLE  (35)
+
+	STOP  shift 24
+	LBRACK  shift 25
+	LANGLE  shift 26
+	RANGLE  shift 27
+	QUOTE  shift 28
+	TILDE  shift 29
+	TRUE  shift 30
+	.  error
+
+	property  goto 73
+	atomic_form  goto 32
+	negation  goto 33
+	conjunction  goto 34
+	mixture  goto 35
+	descent  goto 36
+	elevation  goto 37
+	activity  goto 38
+	group_form  goto 39
+	indication  goto 40
+
+
+state 62
+	conjunction : property . AMPERSAND property  (32)
+	mixture : property . PAR property  (33)
+	judgment : process MODELS property .  (39)
+
+	PAR  shift 59
+	AMPERSAND  shift 60
+	SEMICOLON  reduce 39
+
+
+state 63
+	par : process_atom PAR par .  (6)
+
+	.  reduce 6
+
+
+state 64
+	continuation : LCURLY process . RCURLY  (20)
+
+	RCURLY  shift 74
+	.  error
+
+
+state 65
+	guard : name LPAREN name . RPAREN  (15)
+
+	RPAREN  shift 75
+	.  error
+
+
+state 66
+	lift : name LMSET process . RMSET  (16)
+
+	RMSET  shift 76
+	.  error
+
+
+state 67
+	group_form : LBRACK property RBRACK .  (37)
+
+	.  reduce 37
+
+
+state 68
+	activity : LANGLE indication WHIMPER . name RANGLE LCURLY property RCURLY  (36)
+
+	QUOTE  shift 6
+	.  error
+
+	name  goto 77
+
+
+state 69
+	descent : RANGLE name LANGLE .  (34)
+
+	.  reduce 34
+
+
+state 70
+	indication : QUOTE property QUOTE .  (38)
+
+	.  reduce 38
+
+
+state 71
+	conjunction : property . AMPERSAND property  (32)
+	mixture : property . PAR property  (33)
+	mixture : property PAR property .  (33)
+
+	.  reduce 33
+
+
+state 72
+	conjunction : property . AMPERSAND property  (32)
+	conjunction : property AMPERSAND property .  (32)
+	mixture : property . PAR property  (33)
+
+	PAR  shift 59
+	RBRACK  reduce 32
+	RCURLY  reduce 32
+	RANGLE  reduce 32
+	QUOTE  reduce 32
+	SEMICOLON  reduce 32
+	AMPERSAND  reduce 32
+
+
+state 73
+	conjunction : property . AMPERSAND property  (32)
+	mixture : property . PAR property  (33)
+	elevation : indication LANGLE property . RANGLE  (35)
+
+	RANGLE  shift 78
+	PAR  shift 59
+	AMPERSAND  shift 60
+	.  error
+
+
+state 74
+	continuation : LCURLY process RCURLY .  (20)
+
+	.  reduce 20
+
+
+state 75
+	guard : name LPAREN name RPAREN .  (15)
+
+	.  reduce 15
+
+
+state 76
+	lift : name LMSET process RMSET .  (16)
+
+	.  reduce 16
+
+
+state 77
+	activity : LANGLE indication WHIMPER name . RANGLE LCURLY property RCURLY  (36)
+
+	RANGLE  shift 79
+	.  error
+
+
+state 78
+	elevation : indication LANGLE property RANGLE .  (35)
+
+	.  reduce 35
+
+
+state 79
+	activity : LANGLE indication WHIMPER name RANGLE . LCURLY property RCURLY  (36)
+
+	LCURLY  shift 80
+	.  error
+
+
+state 80
+	activity : LANGLE indication WHIMPER name RANGLE LCURLY . property RCURLY  (36)
+
+	STOP  shift 24
+	LBRACK  shift 25
+	LANGLE  shift 26
+	RANGLE  shift 27
+	QUOTE  shift 28
+	TILDE  shift 29
+	TRUE  shift 30
+	.  error
+
+	property  goto 81
+	atomic_form  goto 32
+	negation  goto 33
+	conjunction  goto 34
+	mixture  goto 35
+	descent  goto 36
+	elevation  goto 37
+	activity  goto 38
+	group_form  goto 39
+	indication  goto 40
+
+
+state 81
+	conjunction : property . AMPERSAND property  (32)
+	mixture : property . PAR property  (33)
+	activity : LANGLE indication WHIMPER name RANGLE LCURLY property . RCURLY  (36)
+
+	RCURLY  shift 82
+	PAR  shift 59
+	AMPERSAND  shift 60
+	.  error
+
+
+state 82
+	activity : LANGLE indication WHIMPER name RANGLE LCURLY property RCURLY .  (36)
+
+	.  reduce 36
+
+
+29 terminals, 25 nonterminals
+42 grammar rules, 83 states
