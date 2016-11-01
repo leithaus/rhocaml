@@ -124,7 +124,7 @@ and parMix hProc rProc hForm rForm =
 													   (* so far only pSet |= hlForm *)
 													 then ( [ ( gpSet, gfSet ) ], ansSet @ [ ( hapSet, hafSet ) ] )
 													   (* pSet, hapSet |= hlForm *)
-													 else if ((ProcessSet.equal ipSet gpSet) or (ProcessSet.equal gpSet ipSet))
+													 else if ((ProcessSet.equal ipSet gpSet) || (ProcessSet.equal gpSet ipSet))
 													 then ( [], ansSet @ [ ( hapSet, hlForm :: hafSet ) ] )
 													 else ( [ ( gpSet, gfSet @ hafSet ) ],
 															ansSet @ [ ( hapSet, hlForm :: hafSet ) ] )))
