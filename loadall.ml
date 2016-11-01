@@ -7,14 +7,21 @@
 (* Description:                                                             *)
 (* ------------------------------------------------------------------------ *)
 
+#use "topfind";;
+#require "json-wheel";;
+
 let run_command com f =
  match Sys.command (com ^ " " ^ f) with
  | 0 -> ()
  | _ -> failwith (Printf.sprintf "Cannot succeed to run ``%s %s''" com f);;
 
-let compile f = run_command "ocamlc -c" f;;
+let compile f = run_command "ocamlfind ocamlc -linkpkg -package json-wheel -c" f;;
 
 compile "rho.ml";;
+
+compile "geometry.ml";;
+
+compile "geometrize.ml";;
 
 compile "vm.ml";;
 
@@ -36,6 +43,8 @@ compile "parser.ml";;
 compile "frontend.ml";;
 
 #load "rho.cmo";;
+#load "geometry.cmo";;
+#load "geometrize.cmo";;
 #load "vm.cmo";;
 #load "logic.cmo";;
 #load "mc.cmo";;
@@ -56,4 +65,3 @@ print_string
    '0'('0'){ 0 }|'0'{| 0 |}\n\
   See the README file for more information.\n";
 print_newline();;
-
